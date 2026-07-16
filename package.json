@@ -1,0 +1,20 @@
+{
+  "name": "spotify-playlist-sorter",
+  "version": "1.0.0",
+  "description": "Public-safe Spotify playlist sorting app with mock demo mode, OAuth-ready architecture, and tested sorting logic.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "node tests/sorter.test.mjs",
+    "check": "node --check src/app.js && node --check src/sorter.js && node --check src/spotifyAuth.js && node --check src/spotifyApi.js && node --check src/mockData.js"
+  },
+  "keywords": [
+    "spotify",
+    "playlist",
+    "javascript",
+    "oauth",
+    "api",
+    "sorting",
+    "frontend"
+  ]
+}
