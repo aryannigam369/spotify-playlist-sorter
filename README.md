@@ -4,6 +4,8 @@ Public-safe Spotify playlist sorting app with mock demo mode, OAuth-ready archit
 
 This project is a clean-room public rebuild of a playlist sorting concept. It does not contain school starter code, assignment materials, private tests, private data, or code from academic repositories.
 
+Live demo: https://aryannigam369.github.io/spotify-playlist-sorter/
+
 ## What It Demonstrates
 
 - Frontend product engineering with a usable playlist sorting interface
