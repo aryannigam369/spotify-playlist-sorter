@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta
+      name="description"
+      content="A public-safe Spotify playlist sorter with mock demo mode, OAuth-ready architecture, and tested sorting logic."
+    >
+    <title>Playlist Sorter Lab</title>
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar" aria-label="Application header">
+        <div>
+          <p class="eyebrow">Public-safe Spotify API showcase</p>
+          <h1>Playlist Sorter Lab</h1>
+        </div>
+        <a class="github-link" href="https://github.com/aryannigam369/spotify-playlist-sorter" target="_blank" rel="noreferrer">
+          View source
+        </a>
+      </header>
+
+      <main>
+        <section class="workspace" aria-label="Playlist sorting workspace">
+          <aside class="control-panel" aria-label="Sorting controls">
+            <div class="panel-section">
+              <span class="section-label">Data source</span>
+              <div class="segmented" role="tablist" aria-label="Data source">
+                <button class="segment active" type="button" data-source="mock">Mock demo</button>
+                <button class="segment" type="button" data-source="spotify">Spotify-ready</button>
+              </div>
+              <p class="microcopy" id="source-copy">
+                Recruiters can use the mock playlist immediately. Real Spotify login is ready once a client ID is configured.
+              </p>
+            </div>
+
+            <div class="panel-section spotify-setup hidden" id="spotify-setup">
+              <label for="client-id">Spotify client ID</label>
+              <input id="client-id" type="text" autocomplete="off" placeholder="Paste client ID">
+              <button class="primary" id="connect-spotify" type="button">Connect Spotify</button>
+              <div class="spotify-library hidden" id="spotify-library">
+                <label for="playlist-select">Playlist</label>
+                <select id="playlist-select"></select>
+                <button class="primary" id="load-playlist" type="button">Load playlist</button>
+              </div>
+              <p class="microcopy">
+                Uses OAuth PKCE in the browser. No client secret is stored or committed.
+              </p>
+              <p class="microcopy" id="spotify-status"></p>
+            </div>
+
+            <div class="panel-section">
+              <label for="sort-field">Sort by</label>
+              <select id="sort-field">
+                <option value="smart">Smart flow score</option>
+                <option value="popularity">Popularity</option>
+                <option value="releaseDate">Release date</option>
+                <option value="durationMs">Duration</option>
+                <option value="artist">Artist</option>
+                <option value="title">Title</option>
+                <option value="album">Album</option>
+                <option value="addedAt">Recently added</option>
+              </select>
+            </div>
+
+            <div class="panel-section">
+              <span class="section-label">Direction</span>
+              <div class="segmented" aria-label="Sort direction">
+                <button class="segment active" type="button" data-direction="desc">High to low</button>
+                <button class="segment" type="button" data-direction="asc">Low to high</button>
+              </div>
+            </div>
+
+            <div class="panel-section">
+              <label for="query">Filter tracks</label>
+              <input id="query" type="search" placeholder="Artist, track, album">
+            </div>
+
+            <div class="panel-section">
+              <button class="primary" id="create-playlist" type="button">Preview sorted playlist</button>
+              <p class="microcopy" id="publish-copy">
+                Mock mode creates a safe preview plan. Spotify mode can create a new sorted playlist after login.
+              </p>
+            </div>
+          </aside>
+
+          <section class="playlist-area" aria-label="Playlist results">
+            <div class="playlist-header">
+              <div>
+                <p class="eyebrow">Now sorting</p>
+                <h2 id="playlist-name">Signal Mix: Product Engineering</h2>
+              </div>
+              <div class="stats-strip" aria-label="Playlist stats">
+                <div>
+                  <strong id="track-count">0</strong>
+                  <span>tracks</span>
+                </div>
+                <div>
+                  <strong id="avg-popularity">0</strong>
+                  <span>avg popularity</span>
+                </div>
+                <div>
+                  <strong id="total-duration">0m</strong>
+                  <span>runtime</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="proof-grid" aria-label="Engineering proof points">
+              <article>
+                <span>API design</span>
+                <strong>OAuth PKCE, playlist read/write scopes, error states</strong>
+              </article>
+              <article>
+                <span>Product logic</span>
+                <strong>Sort plans, filters, mock mode, non-destructive playlist creation</strong>
+              </article>
+              <article>
+                <span>Quality</span>
+                <strong>Pure sorting functions, tests, CI-ready repo structure</strong>
+              </article>
+            </div>
+
+            <div class="table-shell">
+              <table>
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Track</th>
+                    <th scope="col">Artist</th>
+                    <th scope="col">Album</th>
+                    <th scope="col">Released</th>
+                    <th scope="col">Pop.</th>
+                    <th scope="col">Length</th>
+                  </tr>
+                </thead>
+                <tbody id="track-table"></tbody>
+              </table>
+            </div>
+          </section>
+        </section>
+
+        <section class="plan-panel" id="plan-panel" aria-live="polite"></section>
+      </main>
+    </div>
+
+    <script type="module" src="./src/app.js"></script>
+  </body>
+</html>
