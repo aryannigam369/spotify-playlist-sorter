@@ -61,6 +61,8 @@ Most academic repositories should stay private when they contain course code, st
 
 See [docs/clean-room.md](docs/clean-room.md).
 
+For a plain-English walkthrough of how the app works and how to rebuild it from scratch, see [docs/non-coder-builder-guide.md](docs/non-coder-builder-guide.md).
+
 ## Status
 
 First public version:
