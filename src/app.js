@@ -215,24 +215,9 @@ elements.loadPlaylist.addEventListener("click", async () => {
 });
 
 elements.createPlaylist.addEventListener("click", async () => {
-  const plan = buildPlaylistPlan(activeTracks(), state.field, state.direction);
-
-  if (state.source !== "spotify" || !state.accessToken) {
-    renderPlan();
-    return;
-  }
-
-  try {
-    setSpotifyStatus("Creating a new sorted playlist...");
-    const playlist = await createSortedPlaylist(
-      state.accessToken,
-      `${state.playlist.name} - sorted`,
-      `Sorted by Playlist Sorter Lab using ${state.field} ${state.direction}.`
-    );
-    await addItemsToPlaylist(state.accessToken, playlist.id, plan.trackUris.filter((uri) => uri.startsWith("spotify:")));
-    setSpotifyStatus(`Created ${playlist.name} with ${plan.trackUris.length} tracks.`);
-  } catch (error) {
-    setSpotifyStatus(error.message);
+  renderPlan();
+  if (state.source === "spotify" && state.accessToken) {
+    setSpotifyStatus("Preview ready. Playlist creation is intentionally disabled until an explicit create flow is added.");
   }
 });
 
