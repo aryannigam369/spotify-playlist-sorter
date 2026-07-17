@@ -14,7 +14,7 @@ import {
   getCurrentUser,
   getMyPlaylists,
   getPlaylistItems
-} from "./spotifyApi.js?v=20260716-flexible-items";
+} from "./spotifyApi.js?v=20260716-clear-spotify-errors";
 
 const state = {
   source: "mock",
