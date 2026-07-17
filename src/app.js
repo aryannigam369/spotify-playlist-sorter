@@ -9,12 +9,10 @@ import {
 } from "./sorter.js";
 import { exchangeCodeForToken, getSavedClientId, redirectToSpotifyLogin } from "./spotifyAuth.js";
 import {
-  addItemsToPlaylist,
-  createSortedPlaylist,
   getCurrentUser,
   getMyPlaylists,
   getPlaylistItems
-} from "./spotifyApi.js?v=20260716-clear-spotify-errors";
+} from "./spotifyApi.js?v=20260717-owned-items";
 
 const state = {
   source: "mock",
@@ -24,7 +22,8 @@ const state = {
   playlist: mockPlaylist,
   accessToken: sessionStorage.getItem("playlist-sorter-access-token") || "",
   spotifyUser: null,
-  spotifyPlaylists: []
+  spotifyPlaylists: [],
+  supportedSpotifyPlaylists: []
 };
 
 const elements = {
@@ -101,7 +100,7 @@ function render() {
   elements.spotifyLibrary.classList.toggle("hidden", state.source !== "spotify" || !state.accessToken);
   elements.publishCopy.textContent =
     state.source === "spotify"
-      ? "After Spotify login, this flow creates a new sorted playlist instead of changing the original."
+      ? "Spotify mode previews owned or collaborative playlists without changing your account."
       : "Mock mode previews the creation plan without touching any real Spotify account.";
 
   const tracks = activeTracks();
@@ -113,10 +112,14 @@ function setSpotifyStatus(message) {
   elements.spotifyStatus.textContent = message;
 }
 
+function isSupportedSpotifyPlaylist(playlist) {
+  return playlist.owner?.id === state.spotifyUser?.id || playlist.collaborative === true;
+}
+
 function populatePlaylistSelect(playlists) {
   elements.playlistSelect.innerHTML = playlists
     .map((playlist) => {
-      const trackCount = playlist.tracks?.total;
+      const trackCount = playlist.items?.total ?? playlist.tracks?.total;
       const countLabel = Number.isFinite(trackCount) ? `${trackCount} tracks` : "track count unavailable";
       return `<option value="${playlist.id}">${playlist.name} (${countLabel})</option>`;
     })
@@ -136,14 +139,24 @@ async function loadSpotifyAccount() {
 
   state.spotifyUser = user;
   state.spotifyPlaylists = playlistsPage.items || [];
-  populatePlaylistSelect(state.spotifyPlaylists);
-  setSpotifyStatus(`Connected as ${user.display_name || user.id}. Choose a playlist to sort.`);
+  state.supportedSpotifyPlaylists = state.spotifyPlaylists.filter(isSupportedSpotifyPlaylist);
+  populatePlaylistSelect(state.supportedSpotifyPlaylists);
+
+  if (state.supportedSpotifyPlaylists.length === 0) {
+    setSpotifyStatus(
+      `Connected as ${user.display_name || user.id}. Spotify only exposes track details for playlists you own or collaborate on.`
+    );
+  } else {
+    setSpotifyStatus(
+      `Connected as ${user.display_name || user.id}. Showing ${state.supportedSpotifyPlaylists.length} playlists Spotify allows this app to read.`
+    );
+  }
   render();
 }
 
 async function loadSelectedSpotifyPlaylist() {
   const playlistId = elements.playlistSelect.value;
-  const playlist = state.spotifyPlaylists.find((item) => item.id === playlistId);
+  const playlist = state.supportedSpotifyPlaylists.find((item) => item.id === playlistId);
 
   if (!playlist) {
     setSpotifyStatus("Choose a Spotify playlist first.");
