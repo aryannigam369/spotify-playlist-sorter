@@ -40,14 +40,14 @@ export async function getPlaylistItems(token, playlistId) {
   }
 
   return items
-    .filter(({ track }) => track && track.type === "track" && track.id && track.uri)
+    .filter(({ track }) => track && track.id && track.uri)
     .map(({ added_at: addedAt, track }) => ({
       id: track.id,
       uri: track.uri,
       title: track.name,
-      artist: track.artists.map((artist) => artist.name).join(", "),
-      album: track.album.name,
-      releaseDate: track.album.release_date,
+      artist: (track.artists || []).map((artist) => artist.name).join(", ") || "Unknown artist",
+      album: track.album?.name || "Unknown album",
+      releaseDate: track.album?.release_date || "1970-01-01",
       addedAt,
       durationMs: track.duration_ms,
       popularity: track.popularity ?? 0,
