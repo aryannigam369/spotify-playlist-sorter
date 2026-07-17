@@ -1,9 +1,14 @@
 const TEXT_FIELDS = new Set(["title", "artist", "album"]);
+const CURRENT_YEAR = 2026;
 
 export function normalizeText(value) {
   return String(value ?? "")
     .trim()
     .toLocaleLowerCase("en-US");
+}
+
+function clamp(value, min = 0, max = 100) {
+  return Math.max(min, Math.min(max, value));
 }
 
 export function durationLabel(durationMs) {
@@ -26,12 +31,38 @@ export function totalDurationLabel(tracks) {
 }
 
 export function smartFlowScore(track) {
-  const popularity = Number(track.popularity || 0);
-  const energy = Number(track.energy || 0) * 100;
+  const popularity = clamp(Number(track.popularity || 0));
+  const rawEnergy = Number(track.energy);
+  const energy = rawEnergy > 0 ? clamp(rawEnergy * 100) : inferEnergyScore(track);
   const releaseYear = Number(String(track.releaseDate || "").slice(0, 4)) || 2000;
-  const recency = Math.max(0, Math.min(100, (releaseYear - 2015) * 8));
+  const recency = clamp(100 - Math.max(0, CURRENT_YEAR - releaseYear) * 5);
+  const durationMinutes = Number(track.durationMs || 0) / 60000;
+  const durationFit = clamp(100 - Math.abs(durationMinutes - 3.75) * 22);
+  const addedAtMs = Date.parse(track.addedAt || "");
+  const monthsSinceAdded = Number.isFinite(addedAtMs)
+    ? Math.max(0, (Date.UTC(CURRENT_YEAR, 6, 1) - addedAtMs) / (1000 * 60 * 60 * 24 * 30))
+    : 12;
+  const momentum = clamp(100 - monthsSinceAdded * 8);
+  const discoverySweetSpot = clamp(100 - Math.abs(popularity - 78) * 2.2);
 
-  return Math.round(popularity * 0.5 + energy * 0.28 + recency * 0.22);
+  return Math.round(
+    popularity * 0.3 +
+      energy * 0.24 +
+      recency * 0.16 +
+      durationFit * 0.14 +
+      momentum * 0.1 +
+      discoverySweetSpot * 0.06
+  );
+}
+
+function inferEnergyScore(track) {
+  const text = normalizeText(`${track.title} ${track.artist} ${track.album}`);
+  const highEnergyHints = ["race", "anthem", "dance", "party", "summer", "mustang", "mountain", "west coast"];
+  const lowEnergyHints = ["blue", "sad", "honeymoon", "woman", "die", "white", "slow", "dream"];
+  const highBoost = highEnergyHints.reduce((score, hint) => score + (text.includes(hint) ? 8 : 0), 0);
+  const lowPenalty = lowEnergyHints.reduce((score, hint) => score + (text.includes(hint) ? 6 : 0), 0);
+
+  return clamp(50 + highBoost - lowPenalty);
 }
 
 export function getComparableValue(track, field) {
