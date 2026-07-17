@@ -115,7 +115,11 @@ function setSpotifyStatus(message) {
 
 function populatePlaylistSelect(playlists) {
   elements.playlistSelect.innerHTML = playlists
-    .map((playlist) => `<option value="${playlist.id}">${playlist.name} (${playlist.tracks.total} tracks)</option>`)
+    .map((playlist) => {
+      const trackCount = playlist.tracks?.total;
+      const countLabel = Number.isFinite(trackCount) ? `${trackCount} tracks` : "track count unavailable";
+      return `<option value="${playlist.id}">${playlist.name} (${countLabel})</option>`;
+    })
     .join("");
 }
 
