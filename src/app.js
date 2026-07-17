@@ -14,7 +14,7 @@ import {
   getCurrentUser,
   getMyPlaylists,
   getPlaylistItems
-} from "./spotifyApi.js";
+} from "./spotifyApi.js?v=20260716-real-items";
 
 const state = {
   source: "mock",
