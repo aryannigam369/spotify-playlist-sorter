@@ -11,6 +11,11 @@ async function fetchJson(path, token, options = {}) {
   });
 
   if (!response.ok) {
+    if (response.status === 403) {
+      throw new Error(
+        "Spotify denied access to those playlist details. In Development Mode, try a playlist you created, confirm the app owner has Spotify Premium, or use Mock demo."
+      );
+    }
     throw new Error(`Spotify API request failed: ${response.status}`);
   }
 
