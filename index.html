@@ -5,17 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta
       name="description"
-      content="A public-safe Spotify playlist sorter with mock demo mode, OAuth-ready architecture, and tested sorting logic."
+      content="A public-safe Spotify playlist sorter with a personalized Lana-inspired mock demo, OAuth-ready architecture, and tested sorting logic."
     >
     <title>Playlist Sorter Lab</title>
-    <link rel="stylesheet" href="./styles.css">
+    <link rel="preload" as="image" href="https://images.unsplash.com/photo-1777121385243-e3504c29c0c4?auto=format&amp;fit=crop&amp;fm=jpg&amp;q=85&amp;w=2600">
+    <link rel="stylesheet" href="./styles.css?v=20260717-dreamy-americana">
   </head>
   <body>
     <div class="app-shell">
       <header class="topbar" aria-label="Application header">
         <div>
-          <p class="eyebrow">Public-safe Spotify API showcase</p>
+          <p class="eyebrow">Aryan Nigam presents</p>
           <h1>Playlist Sorter Lab</h1>
+          <p class="edition-mark">The Renaissance Edition</p>
         </div>
         <a class="github-link" href="https://github.com/aryannigam369/spotify-playlist-sorter" target="_blank" rel="noreferrer">
           View source
@@ -32,7 +34,7 @@
                 <button class="segment" type="button" data-source="spotify">Spotify-ready</button>
               </div>
               <p class="microcopy" id="source-copy">
-                Recruiters can use the mock playlist immediately. Real Spotify login is ready once a client ID is configured.
+                Recruiters can scan the personalized demo immediately. Real Spotify login is ready once a client ID is configured.
               </p>
             </div>
 
@@ -114,8 +116,8 @@
                 <strong>OAuth PKCE, playlist read/write scopes, error states</strong>
               </article>
               <article>
-                <span>Product logic</span>
-                <strong>Sort plans, filters, mock mode, non-destructive playlist creation</strong>
+                <span>Similarity logic</span>
+                <strong>Smart flow ranking, filters, mock mode, non-destructive previews</strong>
               </article>
               <article>
                 <span>Quality</span>
@@ -144,6 +146,12 @@
 
         <section class="plan-panel" id="plan-panel" aria-live="polite"></section>
       </main>
+      <footer class="site-credit">
+        Background photo by
+        <a href="https://unsplash.com/@sixteenmilesout" target="_blank" rel="noreferrer">Sixteen Miles Out</a>
+        on
+        <a href="https://unsplash.com/photos/art-deco-theater-with-a-marquee-and-vertical-sign-oFo5Rrj2kh8" target="_blank" rel="noreferrer">Unsplash</a>.
+      </footer>
     </div>
 
     <script type="module" src="./src/app.js?v=20260717-lana-score"></script>
