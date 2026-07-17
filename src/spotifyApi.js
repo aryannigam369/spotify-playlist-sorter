@@ -45,17 +45,18 @@ export async function getPlaylistItems(token, playlistId) {
   }
 
   return items
-    .filter(({ track }) => track && track.id && track.uri)
-    .map(({ added_at: addedAt, track }) => ({
-      id: track.id,
-      uri: track.uri,
-      title: track.name,
-      artist: (track.artists || []).map((artist) => artist.name).join(", ") || "Unknown artist",
-      album: track.album?.name || "Unknown album",
-      releaseDate: track.album?.release_date || "1970-01-01",
+    .map(({ added_at: addedAt, item, track }) => ({ addedAt, media: item || track }))
+    .filter(({ media }) => media && media.type === "track" && media.id && media.uri)
+    .map(({ addedAt, media }) => ({
+      id: media.id,
+      uri: media.uri,
+      title: media.name,
+      artist: (media.artists || []).map((artist) => artist.name).join(", ") || "Unknown artist",
+      album: media.album?.name || "Unknown album",
+      releaseDate: media.album?.release_date || "1970-01-01",
       addedAt,
-      durationMs: track.duration_ms,
-      popularity: track.popularity ?? 0,
+      durationMs: media.duration_ms,
+      popularity: media.popularity ?? 0,
       energy: 0
     }));
 }
