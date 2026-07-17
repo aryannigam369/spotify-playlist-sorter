@@ -39,18 +39,20 @@ export async function getPlaylistItems(token, playlistId) {
     nextPath = page.next ? page.next.replace(SPOTIFY_API_BASE, "") : "";
   }
 
-  return items.map(({ added_at: addedAt, track }) => ({
-    id: track.id,
-    uri: track.uri,
-    title: track.name,
-    artist: track.artists.map((artist) => artist.name).join(", "),
-    album: track.album.name,
-    releaseDate: track.album.release_date,
-    addedAt,
-    durationMs: track.duration_ms,
-    popularity: track.popularity ?? 0,
-    energy: 0
-  }));
+  return items
+    .filter(({ track }) => track && track.type === "track" && track.id && track.uri)
+    .map(({ added_at: addedAt, track }) => ({
+      id: track.id,
+      uri: track.uri,
+      title: track.name,
+      artist: track.artists.map((artist) => artist.name).join(", "),
+      album: track.album.name,
+      releaseDate: track.album.release_date,
+      addedAt,
+      durationMs: track.duration_ms,
+      popularity: track.popularity ?? 0,
+      energy: 0
+    }));
 }
 
 export async function createSortedPlaylist(token, name, description) {
