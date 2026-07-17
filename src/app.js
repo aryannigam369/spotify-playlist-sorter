@@ -1,4 +1,4 @@
-import { mockPlaylist } from "./mockData.js?v=20260717-lana-score";
+import { mockPlaylist } from "./mockData.js?v=20260717-shopify-mix";
 import {
   buildPlaylistPlan,
   durationLabel,
@@ -6,7 +6,7 @@ import {
   smartFlowScore,
   sortTracks,
   summarizePlaylist
-} from "./sorter.js?v=20260717-lana-score";
+} from "./sorter.js?v=20260717-shopify-mix";
 import { exchangeCodeForToken, getSavedClientId, redirectToSpotifyLogin } from "./spotifyAuth.js";
 import {
   getCurrentUser,
